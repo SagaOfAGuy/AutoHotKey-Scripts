@@ -1,7 +1,7 @@
 #SingleInstance, Force
 SendMode Input
 SetWorkingDir, %A_ScriptDir%
-; Function that searches entire screen for a certain color
+; Function that searches entire screen for a certain color. Mostly used for testing purposes rather than storing X and Y coordinates of color area on screen.
 SearchColorOnScreen(color) {
     ; Search entire screen for color
     PixelSearch, Px, Py, 0, 0, A_ScreenWidth, A_ScreenHeight, color, 4, Fast RGB
@@ -21,3 +21,34 @@ SearchColorAndClick(color) {
     Else 
         Send {Click %Px% %Py%}
 }
+; Function that returns X and Y coordinate of color on screen if found
+SearchColorAndGetCoords(color) {
+    ; Search entire screen for color
+    PixelSearch, Px, Py, 0, 0, A_ScreenWidth, A_ScreenHeight, color, 4, Fast RGB
+    ; Create object to store coordinate values
+    obj := {}
+    obj.x := Px
+    obj.y := Py
+    ; Handle error if color not found
+    if ErrorLevel
+        MsgBox, Could not find color on screen
+    Else 
+        return obj
+}
+/*
+Examples
+Searches entire screen for 0x00B3F6
+SearchColorOnScreen(0x00B3F6) 
+
+Searches entire screen for 0x00B3F6 and clicks coordinate where 0x00B3F6 is found
+SearchColorAndClick(0x00B3F6)
+
+Searches entire screen for 0x00B3F6 and clicks coordinate where 0x00B3F6 is found
+ColorPosition := SearchColorAndGetCoords(0x00B3F6)
+
+; Get x position of color on screen
+posX := ColorPosition.x
+
+; Get y position of color on screen
+posY := ColorPosition.y
+*/
